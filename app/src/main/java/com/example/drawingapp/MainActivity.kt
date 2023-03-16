@@ -46,6 +46,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        ib_undo.setOnClickListener {
+            drawing_view.onClickUndo()
+        }
+
 
     }
 
