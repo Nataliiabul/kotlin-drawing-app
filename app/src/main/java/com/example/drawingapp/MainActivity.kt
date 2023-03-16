@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.media.MediaScannerConnection
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +16,7 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
@@ -212,6 +214,16 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(
                     this@MainActivity, "Something went wrong while saving the file.", Toast.LENGTH_SHORT
                 ).show()
+            }
+            MediaScannerConnection.scanFile(this@MainActivity, arrayOf(result), null){
+                path, uri -> val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+                shareIntent.type = "image/png"
+
+                startActivity(Intent.createChooser(
+                    shareIntent, "Share")
+                )
             }
         }
 
